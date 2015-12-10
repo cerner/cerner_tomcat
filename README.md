@@ -1,7 +1,12 @@
 Cerner Tomcat Cookbook
 ======================
 
+[![Build Status](https://travis-ci.org/cerner/cerner_kafka.svg?branch=master)](https://travis-ci.org/cerner/cerner_tomcat)
+[![Cookbook Version](https://img.shields.io/cookbook/v/cerner_tomcat.svg)](https://community.opscode.com/cookbooks/cerner_tomcat)
+
 A Chef cookbook to install [Apache Tomcat](http://tomcat.apache.org/).
+
+View the [Change Log](CHANGELOG.md) to see what has changed.
 
 Requirements
 ------------
@@ -208,6 +213,11 @@ Releases
 --------
 
 Releases should happen regularly after most changes. Feel free to request a release by logging an issue.
+
+Committers
+----------
+
+For information related to being a committer check [here](COMMITTERS.md).
 
 LICENSE
 -------
