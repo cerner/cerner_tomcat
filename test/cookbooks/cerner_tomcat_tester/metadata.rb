@@ -7,7 +7,4 @@ description 'Tests the tomcat cookbook'
 long_description 'Tests the tomcat cookbook'
 version '1.0.0'
 name 'cerner_tomcat_tester'
-
-supports 'rhel'
-
 depends 'cerner_tomcat'
