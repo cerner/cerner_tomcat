@@ -72,6 +72,7 @@ cerner_tomcat "my_tomcat" do
                  "-XX:MaxPermSize=" => "384m"
                  "-XX:+UseParNewGC" => ""})
   env_vars({"MY_VAR" => "MY_VALUE"})
+  init_info({'Default-Start' => '1 2 3 4 5'})
   install_java false
 end
 ```
