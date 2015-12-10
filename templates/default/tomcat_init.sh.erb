@@ -1,0 +1,163 @@
+#!/bin/bash
+<%# coding: UTF-8%>
+### BEGIN INIT INFO
+<% @init_info.each do |k, v| -%>
+# <%= k %>: <%= v %>
+<% end -%>
+### END INIT INFO
+
+# Set up the path to CATALINA_HOME (base of Tomcat)
+CATALINA_HOME=<%= ::File.join(@new_resource.base_dir, @new_resource.instance_name) %>
+SLEEP_TIME=5
+TIMEOUT=<%= @new_resource.shutdown_timeout %>
+USER=<%= @new_resource.user %>
+NAME=<%= @new_resource.instance_name %>
+START_CLASS="org.apache.catalina.startup.Bootstrap start"
+
+if [[ ! -f $CATALINA_HOME/bin/catalina.sh ]]; then
+  echo "$NAME may not be installed..."
+  exit 1
+fi
+
+start() {
+  find_pid
+
+  if [[ $PID -gt 0 ]]; then
+    echo "$NAME is already started"
+  else
+    echo "Starting $NAME:"
+    su -l $USER -c $CATALINA_HOME/bin/startup.sh
+
+    if [[ $? -ne 0 ]]; then
+      echo "Error starting $NAME"
+      exit 1
+    fi
+
+    <% for hc in @new_resource.health_checks %>
+    echo "Waiting for application at <%= hc.uri.to_s %> to start"
+    HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %>)
+    for BACKOFF in <%= hc.backoff.join(' ') %>
+    do
+
+        if $(wasSuccessful $HC_CODE); then
+            echo "Health check passed with status $HC_CODE"
+            break
+        fi
+
+        echo "Health check failed with status $HC_CODE"
+        echo "Sleeping for $BACKOFF"
+        sleep $BACKOFF
+        HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %>)
+
+    done
+    if ! $(wasSuccessful $HC_CODE); then
+        echo "Application at <%= hc.uri.to_s %> failed to start."
+        exit 1
+    fi
+    <% end %>
+
+    echo
+  fi
+}
+
+stop() {
+  echo "Shutting down $NAME:"
+
+  find_pid
+
+  CURRENT_WAIT=0
+
+  # Wait until tomcat has successfully stopped
+  while [[ $PID -gt 0 ]];
+  do
+    echo "Attempting to shutdown $NAME..."
+    su -l $USER -c $CATALINA_HOME/bin/shutdown.sh
+
+    if [[ $? -ne 0 ]]; then
+      echo "Error stopping $NAME"
+      exit 1
+    fi
+
+    sleep $SLEEP_TIME
+    CURRENT_WAIT=$(($CURRENT_WAIT+$SLEEP_TIME))
+    if [[ $CURRENT_WAIT -gt $TIMEOUT ]]; then
+      echo "Timed out waiting for $NAME to stop"
+      exit 1
+    fi
+
+    find_pid
+  done
+  echo "$NAME has stopped"
+}
+
+status() {
+  find_pid
+  if [[ $PID -gt 0 ]]; then
+    echo "$NAME ( pid $PID ) is running..."
+  else
+    echo "$NAME is stopped" ; exit 1
+  fi
+}
+
+health() {
+    EXIT_CODE=0
+    HC_CODE=0
+    <% for hc in @new_resource.health_checks %>
+    echo -n "Testing application at <%= hc.uri.to_s %> ..."
+    HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %>)
+    if $(wasSuccessful $HC_CODE); then
+        echo "Health check passed with status $HC_CODE"
+    else
+        echo "Health check failed with status $HC_CODE"
+        EXIT_CODE=1
+    fi
+    <% end %>
+    exit $EXIT_CODE
+}
+
+# Runs an HTTP health check against the specified URI.
+# Parameters:
+# 1: request URI
+# 2: request method (get, head, etc.)
+# 3: maximum request time
+healthCheck() {
+    curl "--$2" -s -L -w "%{http_code}\\n" "$1" --max-time "$3" -o /dev/null
+}
+
+# Checks whether a health check result was successful.
+# Parameters:
+# 1: The HTTP status code from the health check request
+# Returns: boolean true (i.e. 0) or boolean false (i.e. 1)
+wasSuccessful() {
+    if [[ $1 -ge 200 && $1 -le 299 ]]; then
+        return `true`
+    else
+        return `false`
+    fi
+}
+
+find_pid() {
+  PID=`pgrep -u $USER -f "$CATALINA_HOME.*$START_CLASS"`
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    stop
+  ;;
+  restart)
+    stop
+    start
+  ;;
+  status)
+    status
+  ;;
+  health)
+    health
+  ;;
+  *)
+    echo "Usage: tomcat_$NAME {start|stop|restart|status|health}"
+    exit 1
+esac
