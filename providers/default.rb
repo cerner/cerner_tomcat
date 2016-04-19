@@ -234,6 +234,7 @@ action :uninstall do
 
   directory "#{new_resource.base_dir}/#{new_resource.instance_name}" do
     action :delete
+    recursive true
   end
 
   file "#{new_resource.log_dir}/#{new_resource.instance_name}" do
