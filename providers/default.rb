@@ -142,6 +142,7 @@ action :install do
       env_vars: new_resource.env_vars,
       java_settings: new_resource.java_settings
     )
+    notifies :restart, "service[tomcat_#{new_resource.instance_name}]"
   end
 
   # Install web apps
