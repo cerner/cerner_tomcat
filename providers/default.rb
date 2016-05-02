@@ -228,6 +228,12 @@ action :install do
 end
 
 action :uninstall do
+  # Since we are recusively deleting directories guard against empty string which
+  # could result in deleting more then what we want
+  fail "base_dir cannot be empty string" if new_resource.base_dir.empty?
+  fail "instance_name cannot be empty string" if new_resource.instance_name.empty?
+  fail "log_dir cannot be empty string" if new_resource.log_dir.empty?
+
   service "tomcat_#{new_resource.instance_name}" do
     supports status: true, restart: true
     action [:disable, :stop]
@@ -235,6 +241,7 @@ action :uninstall do
 
   directory "#{new_resource.base_dir}/#{new_resource.instance_name}" do
     action :delete
+    recursive true
   end
 
   file "#{new_resource.log_dir}/#{new_resource.instance_name}" do
