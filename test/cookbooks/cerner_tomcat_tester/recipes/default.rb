@@ -11,6 +11,10 @@ cerner_tomcat 'my_tomcat' do
                 '-XX:PermSize=' => '384m',
                 '-XX:MaxPermSize=' => '384m')
   init_info('Thing' => 'Value', 'Default-Start' => '1 2 3 4 5')
+  limits(
+    'open_files' => 65_536,
+    'max_processes' => 4096
+  )
 
   cookbook_file 'my_file' do
     source 'my_file'

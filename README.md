@@ -51,6 +51,7 @@ Parameters:
  * `env_vars`: A Hash of environment variables to be available when starting tomcat (default = `{}`)
  * `init_info`: A Hash of options to configure the init script. These will be merged with and override the defaults provided (view provider for defaults)
  * `install_java`: A boolean that indicates if we should try to install java (default=`true`)
+ * `limits`: A Hash of limits applied to the owner user of the tomcat process (default=`{ 'open_files' => 32_768, 'max_processes' => 1024 }`)
 
 Example:
 ``` ruby
@@ -59,21 +60,25 @@ cerner_tomcat "my_tomcat" do
   group "my_group"
   base_dir "/opt/my_dir"
   log_dir "/var/log/my_dir"
-  log_rotate_options({
+  log_rotate_options(
     'frequency' => 'daily',
     'size' => '10M',
     'maxsize' => '100M'
-  })
+  )
   version "7.0.49"
   shutdown_timeout 120
-  java_settings({"-Xms" => "512m",
+  java_settings("-Xms" => "512m",
                  "-Xmx" => "512m",
                  "-XX:PermSize=" => "384m",
                  "-XX:MaxPermSize=" => "384m"
-                 "-XX:+UseParNewGC" => ""})
-  env_vars({"MY_VAR" => "MY_VALUE"})
-  init_info({'Default-Start' => '1 2 3 4 5'})
+                 "-XX:+UseParNewGC" => "")
+  env_vars("MY_VAR" => "MY_VALUE")
+  init_info('Default-Start' => '1 2 3 4 5')
   install_java false
+  limits(
+    'open_files' => 32_768,
+    'max_processes' => 1024
+  )
 end
 ```
 

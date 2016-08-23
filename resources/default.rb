@@ -27,6 +27,7 @@ attribute :java_settings,      kind_of: Hash,    default: {}
 attribute :env_vars,           kind_of: Hash,    default: {}
 attribute :init_info,          kind_of: Hash,    default: {}
 attribute :install_java,       kind_of: [TrueClass, FalseClass],    default: true
+attribute :limits,             kind_of: Hash,    default: {}
 
 def cookbook_file(file_path, &block)
   cookbook_file = ::CernerTomcat::CookbookFileBlock.new(file_path)
