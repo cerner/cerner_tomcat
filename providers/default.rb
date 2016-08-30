@@ -28,10 +28,17 @@ action :install do
     notifies :restart, "service[tomcat_#{new_resource.instance_name}]"
   end
 
-  # Setup ulimits
-  node.default['ulimit']['users'][new_resource.user]['filehandle_limit'] = 32_768
-  node.default['ulimit']['users'][new_resource.user]['process_limit'] = 1024
+  limits_defaults = { 'open_files' => 32_768, 'max_processes' => 1024 }
+  limits_options = limits_defaults.merge(new_resource.limits)
 
+  user_ulimit new_resource.user do
+    filehandle_limit limits_options['open_files']
+    process_limit limits_options['max_processes']
+  end
+
+  # From the requirements of the cookbook:
+  # If you're on Ubuntu, you'll also need to add recipe[ulimit] to your 
+  # runlist, or the files created by this cookbook will be ignored
   run_context.include_recipe 'ulimit'
 
   # Create base directory

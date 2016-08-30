@@ -18,4 +18,4 @@ suites:
       - recipe[cerner_tomcat_tester]
     attributes:
       java:
-        jdk_version: 7
+        jdk_version: 8

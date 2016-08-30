@@ -106,3 +106,9 @@ describe file('/opt/my_dir/my_tomcat/bin/setenv.sh') do
   it { should be_grouped_into 'my_group' }
   it { should contain 'export TEST_VAR=TEST_VALUE' }
 end
+
+describe file('/etc/security/limits.d/my_user_limits.conf') do
+  it { should be_file }
+  it { should contain 'my_user - nofile 65536' }
+  it { should contain 'my_user - nproc 4096' }
+end
