@@ -228,6 +228,7 @@ action :install do
 
   # Enable tomcat instance, :enable adds service to startup,
   # :start starts service if it isn't already started
+  [:enable] << :start if new_resource.start_on_install
   service "tomcat_#{new_resource.instance_name}" do
     supports status: true, restart: true
     action [:enable, :start]

@@ -31,6 +31,8 @@ cerner_tomcat 'my_tomcat' do
 
   health_check 'http://localhost:8080/my_webapp/hello'
 
+  start_on_install false
+
   web_app 'my_webapp' do
     source 'http://tomcat.apache.org/tomcat-7.0-doc/appdev/sample/sample.war'
 
