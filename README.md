@@ -52,6 +52,10 @@ Parameters:
  * `init_info`: A Hash of options to configure the init script. These will be merged with and override the defaults provided (view provider for defaults)
  * `install_java`: A boolean that indicates if we should try to install java (default=`true`)
  * `limits`: A Hash of limits applied to the owner user of the tomcat process (default=`{ 'open_files' => 32_768, 'max_processes' => 1024 }`)
+ * `start_on_install`: A boolean that indicates if the service should be started immediately
+ on installation. On a fresh installation, you generally will always restart the service
+ process, so this may be used as a deployment optimization to avoid a start and later
+ restart of the service (default=`true`).
 
 Example:
 ``` ruby

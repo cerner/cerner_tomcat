@@ -11,10 +11,15 @@ describe service('my_tomcat') do
   it { should be_running   }
 end
 
-# There should only be 1 java process running
+describe service('my_tomcat_2') do
+  it { should be_running   }
+end
+
+# Verify both of the services running (2 of them)
 describe process('java') do
-  its(:user) { should eq 'my_user' }
-  its(:args) { should match /-Xms512m -Xmx512m -XX:PermSize=384m -XX:MaxPermSize=384m/ }
+  its(:count) { should eq 2 }
+  its(:user)  { should eq 'my_user' }
+  its(:args)  { should match /-Xms512m -Xmx512m -XX:PermSize=384m -XX:MaxPermSize=384m/ }
 end
 
 describe file('/opt/my_dir/my_tomcat/my_file') do

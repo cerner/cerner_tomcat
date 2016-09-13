@@ -227,10 +227,15 @@ action :install do
   end
 
   # Enable tomcat instance, :enable adds service to startup,
-  # :start starts service if it isn't already started
+  # :start starts service if it isn't already started. 
+  # :start will be conditionally applied, as the service restart will
+  # always be restarted at the end of convergence if any file that
+  # requires service restart is triggered.
+  service_actions = [:enable]
+  service_actions << :start if new_resource.start_on_install
   service "tomcat_#{new_resource.instance_name}" do
     supports status: true, restart: true
-    action [:enable, :start]
+    action service_actions
   end
 end
 
