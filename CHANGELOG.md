@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+[2.2.0 - 09-13-2016](https://github.com/cerner/cerner_tomcat/issues?milestone=3&state=closed)
+---------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-17](https://github.com/cerner/cerner_tomcat/issues/17) : ulimit settings are hard-coded in the provider
+  * [Enhancement] [Issue-16](https://github.com/cerner/cerner_tomcat/issues/16) : Reduce the number of service start-up events on a single chef-client execution
+
 [2.1.1 - 05-02-2016](https://github.com/cerner/cerner_tomcat/issues?milestone=2&state=closed)
 ---------------------------------------------------------------------------------------------
 
