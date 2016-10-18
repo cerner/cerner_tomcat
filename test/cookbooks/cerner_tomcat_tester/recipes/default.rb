@@ -18,15 +18,74 @@ cerner_tomcat 'my_tomcat' do
 
   cookbook_file 'my_file' do
     source 'my_file'
+    mode '0767'
+
+    # we can increase sleep to force a timeout and demonstrate this behavior works
+    only_if 'sleep 1', timeout: 3
+
+    # evaluates to false since "5" is not a valid command line option
+    not_if 'ls -5'
+  end
+
+  cookbook_file 'only_if_skipped_cookbook_file' do
+    source 'my_file'
+    only_if { false }
+  end
+
+  cookbook_file 'not_if_skipped_cookbook_file' do
+    source 'my_file'
+    not_if { true }
   end
 
   remote_file 'my_remote_file' do
     source 'https://gist.github.com/bbaugher/31950ed43f0ab0eab788'
+    mode '0747'
+
+    # we can increase sleep to force a timeout and demonstrate this behavior works
+    only_if 'sleep 1', timeout: 3
+
+    # evaluates to false since "5" is not a valid command line option
+    not_if 'ls -5'
+  end
+
+  remote_file 'only_if_skipped_remote_file' do
+    source 'https://gist.github.com/bbaugher/31950ed43f0ab0eab788'
+    only_if { false }
+  end
+
+  remote_file 'not_if_skipped_remote_file' do
+    source 'https://gist.github.com/bbaugher/31950ed43f0ab0eab788'
+    not_if { true }
+  end
+
+  remote_file 'multiple_not_if_skipped_remote_file' do
+    source 'https://gist.github.com/bbaugher/31950ed43f0ab0eab788'
+    not_if { false }
+    not_if { true }
   end
 
   template 'my_template' do
     source 'my_template.erb'
     variables(key: 'tomcat_my_template')
+    mode '0707'
+
+    # we can increase sleep to force a timeout and demonstrate this behavior works
+    only_if 'sleep 1', timeout: 3
+
+    # evaluates to false since "5" is not a valid command line option
+    not_if 'ls -5'
+  end
+
+  template 'only_if_skipped_template' do
+    source 'my_template.erb'
+    variables(key: 'tomcat_my_template')
+    only_if { false }
+  end
+
+  template 'not_if_skipped_template' do
+    source 'my_template.erb'
+    variables(key: 'tomcat_my_template')
+    not_if { true }
   end
 
   template 'conf/server.xml' do
