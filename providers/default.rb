@@ -58,6 +58,7 @@ action :install do
     mode '0755'
     backup false
 
+    notifies :stop, "service[tomcat_#{new_resource.instance_name}]", :immediately
     notifies :run, "bash[install_tomcat_#{new_resource.instance_name}]", :immediately
   end
 
@@ -72,10 +73,6 @@ action :install do
       mv apache-tomcat-#{new_resource.version} #{new_resource.instance_name}
       rm -rf #{new_resource.instance_name}/webapps/*
     EOH
-
-    not_if do
-      ::File.exist?(install_dir)
-    end
   end
 
   directory new_resource.log_dir do
