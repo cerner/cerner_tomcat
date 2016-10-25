@@ -18,14 +18,16 @@ action :install do
   end
 
   # Setup user/group
-  group new_resource.group do
+  group new_resource.group do # ~FC021 -- Fixed in 10.18.0, not likely to be an issue either way
     action :create
     notifies :restart, "service[tomcat_#{new_resource.instance_name}]"
+    only_if { new_resource.create_user }
   end
 
-  user new_resource.user do
+  user new_resource.user do # ~FC021 -- Fixed in 10.18.0, not likely to be an issue either way
     gid new_resource.group
     notifies :restart, "service[tomcat_#{new_resource.instance_name}]"
+    only_if { new_resource.create_user }
   end
 
   limits_defaults = { 'open_files' => 32_768, 'max_processes' => 1024 }
