@@ -162,6 +162,7 @@ Parameters:
  * `http_method`: The HTTP method to use when running the health check (default=`GET`)
  * `backoff`: An array that indicates how back off should be handled, including the number of times and how long to wait before trying again (default=`[0, 5, 10, 30, 30, 60]`)
  * `time_bound`: The amount of time to wait before timing out a request (default=`3`)
+ * `args`: Additional command line arguments to pass into cURL
 
 Example:
 ``` ruby
