@@ -1,7 +1,7 @@
 # A Block which represents a health_check resource in the cerner_tomcat LWRP
 module CernerTomcat
   class HealthCheckBlock < Block
-    attr_reader :uri, :http_method, :backoff, :time_bound
+    attr_reader :uri, :http_method, :backoff, :time_bound, :args
 
     def initialize(uri)
       @uri = uri
@@ -28,6 +28,11 @@ module CernerTomcat
     def time_bound(time_bound = nil)
       @time_bound = time_bound unless time_bound.nil?
       @time_bound
+    end
+
+    def args(args = nil)
+      @args = args unless args.nil?
+      @args
     end
   end
 end

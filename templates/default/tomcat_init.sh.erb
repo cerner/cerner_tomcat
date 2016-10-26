@@ -35,7 +35,7 @@ start() {
 
     <% for hc in @new_resource.health_checks %>
     echo "Waiting for application at <%= hc.uri.to_s %> to start"
-    HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %>)
+    HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %> <%= hc.args %>)
     for BACKOFF in <%= hc.backoff.join(' ') %>
     do
 
@@ -47,7 +47,7 @@ start() {
         echo "Health check failed with status $HC_CODE"
         echo "Sleeping for $BACKOFF"
         sleep $BACKOFF
-        HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %>)
+        HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %> <%= hc.args %>)
 
     done
     if ! $(wasSuccessful $HC_CODE); then
@@ -104,7 +104,7 @@ health() {
     HC_CODE=0
     <% for hc in @new_resource.health_checks %>
     echo -n "Testing application at <%= hc.uri.to_s %> ..."
-    HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %>)
+    HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %> <%= hc.args %>)
     if $(wasSuccessful $HC_CODE); then
         echo "Health check passed with status $HC_CODE"
     else
@@ -120,8 +120,9 @@ health() {
 # 1: request URI
 # 2: request method (get, head, etc.)
 # 3: maximum request time
+# 4: additional arguments
 healthCheck() {
-    curl "--$2" -s -L -w "%{http_code}\\n" "$1" --max-time "$3" -o /dev/null
+    curl "--$2" -s -L -w "%{http_code}\\n" "$1" --max-time "$3" -o /dev/null ${@:4}
 }
 
 # Checks whether a health check result was successful.

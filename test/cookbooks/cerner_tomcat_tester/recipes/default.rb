@@ -150,7 +150,9 @@ cerner_tomcat 'my_tomcat_2' do
       })
   end
 
-  health_check 'http://localhost:8011/my_webapp/hello'
+  health_check 'http://localhost:8011/my_webapp/hello' do
+    args '-k'
+  end
 
   start_on_install false
 
