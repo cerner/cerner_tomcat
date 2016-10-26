@@ -269,11 +269,18 @@ def tomcat_template(new_resource, path, template_block)
 
   create_parent_directory new_resource, file_path
 
-  template file_path do
+  template file_path do # ~FC022 -- not applicable
     source template_block.source
     owner new_resource.user
-    group new_resource.group
-    mode '0750'
+    mode template_block.mode
+    # for each only_if/not_if element, check if it is a proc.
+    # if proc, convert to block, otherwise splat the array of command and option
+    template_block.only_if.each do |args|
+      if args.is_a? Proc; only_if &args else only_if *args end
+    end
+    template_block.not_if.each do |args|
+      if args.is_a? Proc; not_if &args else not_if *args end
+    end
     backup false
     sensitive true if Chef::Resource::User.method_defined? :sensitive
     cookbook template_block.cookbook unless template_block.cookbook.nil?
@@ -287,11 +294,21 @@ def tomcat_cookbook_file(new_resource, path, cookbook_file_block)
 
   create_parent_directory new_resource, file_path
 
-  cookbook_file file_path do
+  cookbook_file file_path do # ~FC022 -- not applicable
     source cookbook_file_block.source
     owner new_resource.user
     group new_resource.group
-    mode '0750'
+    mode cookbook_file_block.mode
+
+    # for each only_if/not_if element, check if it is a proc.
+    # if proc, convert to block, otherwise splat the array of command and option
+    cookbook_file_block.only_if.each do |args|
+      if args.is_a? Proc; only_if &args else only_if *args end
+    end
+    cookbook_file_block.not_if.each do |args|
+      if args.is_a? Proc; not_if &args else not_if *args end
+    end
+
     backup false
     sensitive true if Chef::Resource::User.method_defined? :sensitive
     cookbook cookbook_file_block.cookbook unless cookbook_file_block.cookbook.nil?
@@ -304,11 +321,21 @@ def tomcat_remote_file(new_resource, path, remote_file_block)
 
   create_parent_directory new_resource, file_path
 
-  remote_file file_path do
+  remote_file file_path do # ~FC022 -- not applicable
     source remote_file_block.source
     owner new_resource.user
     group new_resource.group
-    mode '0750'
+    mode remote_file_block.mode
+
+    # for each only_if/not_if element, check if it is a proc.
+    # if proc, convert to block, otherwise splat the array of command and option
+    remote_file_block.only_if.each do |args|
+      if args.is_a? Proc; only_if &args else only_if *args end
+    end
+    remote_file_block.not_if.each do |args|
+      if args.is_a? Proc; not_if &args else not_if *args end
+    end
+
     backup false
     sensitive true if Chef::Resource::User.method_defined? :sensitive
     notifies :restart, "service[tomcat_#{new_resource.instance_name}]"

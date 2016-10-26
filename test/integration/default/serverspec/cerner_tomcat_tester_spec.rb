@@ -26,12 +26,34 @@ describe file('/opt/my_dir/my_tomcat/my_file') do
   it { should be_file }
   it { should be_owned_by 'my_user' }
   it { should be_grouped_into 'my_group' }
+  it { should be_mode 767 }
+end
+
+describe file('/opt/my_dir/my_tomcat/only_if_skipped_cookbook_file') do
+  it { should_not exist }
+end
+
+describe file('/opt/my_dir/my_tomcat/not_if_skipped_cookbook_file') do
+  it { should_not exist }
 end
 
 describe file('/opt/my_dir/my_tomcat/my_remote_file') do
   it { should be_file }
   it { should be_owned_by 'my_user' }
   it { should be_grouped_into 'my_group' }
+  it { should be_mode 747 }
+end
+
+describe file('/opt/my_dir/my_tomcat/only_if_skipped_remote_file') do
+  it { should_not exist }
+end
+
+describe file('/opt/my_dir/my_tomcat/not_if_skipped_remote_file') do
+  it { should_not exist }
+end
+
+describe file('/opt/my_dir/my_tomcat/multiple_not_if_skipped_remote_file') do
+  it { should_not exist }
 end
 
 describe file('/opt/my_dir/my_tomcat/my_template') do
@@ -39,6 +61,15 @@ describe file('/opt/my_dir/my_tomcat/my_template') do
   it { should be_owned_by 'my_user' }
   it { should be_grouped_into 'my_group' }
   it { should contain 'tomcat_my_template' }
+  it { should be_mode 707 }
+end
+
+describe file('/opt/my_dir/my_tomcat/only_if_skipped_template') do
+  it { should_not exist }
+end
+
+describe file('/opt/my_dir/my_tomcat/not_if_skipped_template') do
+  it { should_not exist }
 end
 
 describe file('/opt/my_dir/my_tomcat/webapps/my_webapp') do

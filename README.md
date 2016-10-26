@@ -101,12 +101,17 @@ Parameters:
 
  * `source`: The name of the cookbook file (required)
  * `cookbook`: The name of the cookbook to find the file (optional). Defaults to the cookbook calling the LWRP
+ * `mode`: The permissions to set on the cookbook file (optional). Defaults to '750'
+ * `only_if`: Use a chef only_if [guard](https://docs.chef.io/resource_common.html#guards] to only write the cookbook file if the statement evaluates to true (optional).
+ * `not_if`: Use a chef not_if [guard](https://docs.chef.io/resource_common.html#guards] to not write the cookbook file if the statement evaluates to true (optional).
 
 Example:
 ``` ruby
 cerner_tomcat "my_tomcat" do
   cookbook_file "lib/mysql.jar" do
     source "mysql-5.12.jar"
+    only_if { File.exists?('mysql-5.12.jar') }
+    not_if { node['tomcat-service']['data_base_disabled'] }
   end
 end
 ```
@@ -120,12 +125,17 @@ if you wanted a file in tomcat's lib directory its path should be `lib/myRemoteF
 Parameters:
 
  * `source`: The URL to use to download the remote file (required)
+ * `mode`: The permissions to set on the remote file (optional). Defaults to '750'
+ * `only_if`: Use a chef only_if [guard](https://docs.chef.io/resource_common.html#guards] to only write the remote file if the statement evaluates to true (optional).
+ * `not_if`: Use a chef not_if [guard](https://docs.chef.io/resource_common.html#guards] to not write the remote file if the statement evaluates to true (optional).
 
 Example:
 ``` ruby
 cerner_tomcat "my_tomcat" do
   remote_file "lib/mysql.jar" do
     source "http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.25/mysql-connector-java-5.1.25.jar"
+    only_if { File.exists?('mysql-5.12.jar') }
+    not_if { node['tomcat-service']['data_base_disabled'] }
   end
 end
 ```
@@ -141,13 +151,18 @@ Parameters:
  * `source`: The name of the template (required)
  * `cookbook`: The name of the cookbook to find the template (optional). Defaults to the cookbook calling the LWRP
  * `variables`: A hash of variables to be injected into the template (optional)
+ * `mode`: The permissions to set on the template (optional). Defaults to '750'
+ * `only_if`: Use a chef only_if [guard](https://docs.chef.io/resource_common.html#guards] to only write the template if the statement evaluates to true (optional).
+ * `not_if`: Use a chef not_if [guard](https://docs.chef.io/resource_common.html#guards] to not write the template if the statement evaluates to true (optional).
 
 Example:
 ``` ruby
 cerner_tomcat "my_tomcat" do
-  template "conf/server.xml" do
-    source "server.xml.erb"
+  template "conf/dependency-conf.xml" do
+    source "dependency-conf.xml.erb"
     variables {"myVar" => "myValue"}
+    only_if { File.exists?('lib/dependency.jar') }
+    not_if { node['tomcat-service']['dependency_conf_deployed'] }
   end
 end
 ```
