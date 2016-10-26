@@ -79,6 +79,7 @@ cerner_tomcat 'my_tomcat_2' do
     'open_files' => 65_536,
     'max_processes' => 4096
   )
+  create_user false
 
   template 'conf/server.xml' do
     source 'server.xml.erb'

@@ -56,6 +56,7 @@ Parameters:
  on installation. On a fresh installation, you generally will always restart the service
  process, so this may be used as a deployment optimization to avoid a start and later
  restart of the service (default=`true`).
+ * `create_user`: A boolean that indicates if the service user should be created (default=`true`)
 
 Example:
 ``` ruby
