@@ -5,7 +5,7 @@ Change Log
 ---------------------------------------------------------------------------------------------
 
   * [Bug] [Issue-26](https://github.com/cerner/cerner_tomcat/issues/26) : Install block has unnecessary not_if guard
-  * [] [Issue-25](https://github.com/cerner/cerner_tomcat/issues/25) : Adding additional properties to sub resources
+  * [Enhancement] [Issue-25](https://github.com/cerner/cerner_tomcat/issues/25) : Adding additional properties to sub resources
   * [Enhancement] [Issue-23](https://github.com/cerner/cerner_tomcat/issues/23) : Support additional command line options for health checks
   * [Enhancement] [Issue-15](https://github.com/cerner/cerner_tomcat/issues/15) : Add a flag to disable user/group creation
 
