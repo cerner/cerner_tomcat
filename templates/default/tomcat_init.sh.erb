@@ -138,7 +138,7 @@ wasSuccessful() {
 }
 
 find_pid() {
-  PID=`pgrep -u $USER -f "$CATALINA_HOME.*$START_CLASS"`
+  PID=`pgrep -u $USER -f "$CATALINA_HOME .*$START_CLASS"`
 }
 
 case "$1" in
