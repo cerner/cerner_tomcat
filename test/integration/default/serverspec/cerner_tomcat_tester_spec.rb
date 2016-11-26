@@ -104,6 +104,18 @@ describe file('/opt/my_dir/my_tomcat/webapps/my_webapp/my_template') do
   it { should contain 'web_app_template' }
 end
 
+describe file('/opt/my_dir/my_tomcat_2/webapps/my_webapp.war') do
+  it { should be_file }
+  it { should be_owned_by 'my_user' }
+  it { should be_grouped_into 'my_group' }
+end
+
+describe file('/opt/my_dir/my_tomcat_2/webapps/my_webapp/my_file') do
+  it { should be_file }
+  it { should be_owned_by 'my_user' }
+  it { should be_grouped_into 'my_group' }
+end
+
 describe file('/opt/my_logs') do
   it { should be_directory }
   it { should be_owned_by 'my_user' }
@@ -136,7 +148,7 @@ describe file('/etc/init.d/tomcat_my_tomcat') do
   it { should contain '# Provides: my_tomcat' }
   it { should contain '# Default-Stop: 0 1 2 6' }
   it { should contain 'HC_CODE=$(healthCheck http://localhost:8001/my_webapp/hello GET 3 )' }
-  it { should contain 'PID=`pgrep -u $USER -f "$CATALINA_HOME .*$START_CLASS"`' } 
+  it { should contain 'PID=`pgrep -u $USER -f "$CATALINA_HOME .*$START_CLASS"`' }
 end
 
 describe file('/etc/init.d/tomcat_my_tomcat_2') do
@@ -148,7 +160,7 @@ describe file('/etc/init.d/tomcat_my_tomcat_2') do
   it { should contain '# Provides: my_tomcat_2' }
   it { should contain '# Default-Stop: 0 1 2 6' }
   it { should contain 'HC_CODE=$(healthCheck http://localhost:8011/my_webapp/hello GET 3 -k)' }
-  it { should contain 'PID=`pgrep -u $USER -f "$CATALINA_HOME .*$START_CLASS"`' } 
+  it { should contain 'PID=`pgrep -u $USER -f "$CATALINA_HOME .*$START_CLASS"`' }
 end
 
 describe file('/opt/my_dir/my_tomcat/bin/setenv.sh') do

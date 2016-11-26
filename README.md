@@ -18,24 +18,54 @@ Requirements
 
 ### Chef
 
- * Chef 11+
+ * Chef 12+
 
 ### Cookbooks
 
  * java
  * ulimit
  * logrotate
+ * poise
+ * poise-archive
 
 Usage
 -----
 
 The cookbook provides a resource for you to use to install and configure tomcat.
 
+The `cerner_tomcat` resource has support for `remote_file`, `cookbook_file`, and `template` as sub-resources of the cerner_tomcat resource. When using these sub-resources, the parent `cerner_tomcat` resource's path, user, group and sensitive properties are provided for free. These sub-resources can also be called from outside the `cerner_tomcat` block, if desired, by prepending `cerner_tomcat_` to the resource call and provided a `parent` property.
+
+Example:
+```ruby
+cerner_tomcat 'my_tomcat' do
+  # resource config
+end
+
+cerner_tomcat_remote_file do
+   parent 'my_tomcat'
+   source '...'
+end
+```
+
+`cerner_tomcat` delays restart, when necessary, for the end of the main converge. This is in order to avoid restarting the service multiple times during a chef-client run. If any service dependencies are updated and require a service restart, this can be done by notifying the resource with a restart action.
+
+Example:
+```ruby
+cerner_tomcat 'my_tomcat' do
+  # resource config
+end
+
+dependent_resource 'dep' do
+  # resource config
+  notifies :restart, 'cerner_tomcat[my_tomcat]'
+end
+```
+
 ### cerner_tomcat
 
 A resource for installing and configuring tomcat.
 
-Actions: `:install`, `:uninstall` (default `:install`)
+Actions: `:install`, `:uninstall`, `:stop`, `:restart` (default `:install`)
 
 Parameters:
  * `instance_name`: The name of the tomcat instance. (default = name of resource)
@@ -43,20 +73,17 @@ Parameters:
  * `group`: The group the tomcat user will be part of (default = `tomcat`)
  * `base_dir`: The path to the directory where the tomcat instance will be contained (default = `/opt/tomcat`)
  * `log_dir`: The path to the directory where the tomcat logs will be (default = `/var/log/tomcat`)
- * `log_rotate_options`: A hash of options to configure log rotate. These will be merged with and override the defaults provided (view provider for defaults)
+ * `log_rotate_options`: A hash or ruby block of options to configure log rotate. These will be merged with and override the defaults provided (view `libraries/cerner_tomcat.rb` for defaults)
  * `version`: The version of tomcat to install. This effectively builds the tomcat_url from a known URL (`repo1.maven.org`) with the given version (default=`8.0.21`)
  * `tomcat_url`: The URL to the tomcat binary used to install tomcat. This will override the url provided by `version`. NOTE: `version` needs to still be up to date in order to install tomcat properly
  * `shutdown_timeout`: The timeout used when trying to shutdown the tomcat service (default = `60`)
  * `java_settings`: A Hash of java settings to be applied to the tomcat process (default = `{}`)
  * `env_vars`: A Hash of environment variables to be available when starting tomcat (default = `{}`)
- * `init_info`: A Hash of options to configure the init script. These will be merged with and override the defaults provided (view provider for defaults)
+ * `init_info`: A Hash or ruby block of options to configure the init script. These will be merged with and override the defaults provided (view `libraries/cerner_tomcat.rb` for defaults)
  * `install_java`: A boolean that indicates if we should try to install java (default=`true`)
- * `limits`: A Hash of limits applied to the owner user of the tomcat process (default=`{ 'open_files' => 32_768, 'max_processes' => 1024 }`)
- * `start_on_install`: A boolean that indicates if the service should be started immediately
- on installation. On a fresh installation, you generally will always restart the service
- process, so this may be used as a deployment optimization to avoid a start and later
- restart of the service (default=`true`).
+ * `limits`: A Hash or ruby block of limits applied to the owner user of the tomcat process (default=`{ 'open_files' => 32_768, 'max_processes' => 1024 }`)
  * `create_user`: A boolean that indicates if the service user should be created (default=`true`)
+ * `sensitive`: A boolean used to ensure sensitive resource data is not logged by the chef-client. Remote_file, cookbook_file, and template sub-resources can be overriden (default=true)
 
 Example:
 ``` ruby
@@ -65,11 +92,11 @@ cerner_tomcat "my_tomcat" do
   group "my_group"
   base_dir "/opt/my_dir"
   log_dir "/var/log/my_dir"
-  log_rotate_options(
-    'frequency' => 'daily',
-    'size' => '10M',
-    'maxsize' => '100M'
-  )
+  log_rotate_options do
+    frequency: 'daily'
+    size: '10M'
+    maxsize: '100M'
+  end
   version "7.0.49"
   shutdown_timeout 120
   java_settings("-Xms" => "512m",
@@ -88,84 +115,6 @@ end
 ```
 
 Sub-Resource Parameters:
-
-These parameters all take a block as their argument much like Chef's resources.
-
-#### cookbook_file
-
-A cookbook file to be included into the tomcat installation. The name of the sub-resource should be
-a relative path to where the file should be included from the tomcat's installation directory. So
-if you wanted a file in tomcat's lib directory its path should be `lib/myCookbookFile`.
-
-Parameters:
-
- * `source`: The name of the cookbook file (required)
- * `cookbook`: The name of the cookbook to find the file (optional). Defaults to the cookbook calling the LWRP
- * `mode`: The permissions to set on the cookbook file (optional). Defaults to '750'
- * `only_if`: Use a chef only_if [guard](https://docs.chef.io/resource_common.html#guards] to only write the cookbook file if the statement evaluates to true (optional).
- * `not_if`: Use a chef not_if [guard](https://docs.chef.io/resource_common.html#guards] to not write the cookbook file if the statement evaluates to true (optional).
-
-Example:
-``` ruby
-cerner_tomcat "my_tomcat" do
-  cookbook_file "lib/mysql.jar" do
-    source "mysql-5.12.jar"
-    only_if { File.exists?('mysql-5.12.jar') }
-    not_if { node['tomcat-service']['data_base_disabled'] }
-  end
-end
-```
-
-#### remote_file
-
-A remote file to be included into the tomcat installation. The name of the sub-resource should be
-a relative path to where the file should be included from the tomcat's installation directory. So
-if you wanted a file in tomcat's lib directory its path should be `lib/myRemoteFile`.
-
-Parameters:
-
- * `source`: The URL to use to download the remote file (required)
- * `mode`: The permissions to set on the remote file (optional). Defaults to '750'
- * `only_if`: Use a chef only_if [guard](https://docs.chef.io/resource_common.html#guards] to only write the remote file if the statement evaluates to true (optional).
- * `not_if`: Use a chef not_if [guard](https://docs.chef.io/resource_common.html#guards] to not write the remote file if the statement evaluates to true (optional).
-
-Example:
-``` ruby
-cerner_tomcat "my_tomcat" do
-  remote_file "lib/mysql.jar" do
-    source "http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.25/mysql-connector-java-5.1.25.jar"
-    only_if { File.exists?('mysql-5.12.jar') }
-    not_if { node['tomcat-service']['data_base_disabled'] }
-  end
-end
-```
-
-#### template
-
- A template to be included into the tomcat installation. The name of the sub-resource should be
-a relative path to where the file should be included from the tomcat's installation directory. So
-if you wanted a file in tomcat's lib directory its path should be `lib/myTemplate`.
-
-Parameters:
-
- * `source`: The name of the template (required)
- * `cookbook`: The name of the cookbook to find the template (optional). Defaults to the cookbook calling the LWRP
- * `variables`: A hash of variables to be injected into the template (optional)
- * `mode`: The permissions to set on the template (optional). Defaults to '750'
- * `only_if`: Use a chef only_if [guard](https://docs.chef.io/resource_common.html#guards] to only write the template if the statement evaluates to true (optional).
- * `not_if`: Use a chef not_if [guard](https://docs.chef.io/resource_common.html#guards] to not write the template if the statement evaluates to true (optional).
-
-Example:
-``` ruby
-cerner_tomcat "my_tomcat" do
-  template "conf/dependency-conf.xml" do
-    source "dependency-conf.xml.erb"
-    variables {"myVar" => "myValue"}
-    only_if { File.exists?('lib/dependency.jar') }
-    not_if { node['tomcat-service']['dependency_conf_deployed'] }
-  end
-end
-```
 
 #### health_check
 
@@ -197,7 +146,7 @@ end
 #### web_app
 
 A web application to be included in the tomcat installation. The name of the sub-resource should
-be the context root to be used for the application. This sub-resource also has `cookbook_file`,
+be the context root to be used for the application. This sub-resource also accepts `cookbook_file`,
 `remote_file`, and `template` sub-resources just like those listed above.
 
 Parameters:
