@@ -32,7 +32,7 @@ cerner_tomcat 'my_tomcat' do
     'max_processes' => 4096
   )
 
-  cookbook_file 'my_file' do
+ cookbook_file 'my_file' do
     source 'my_file'
     mode '0767'
 
@@ -116,8 +116,6 @@ cerner_tomcat 'my_tomcat' do
 
   health_check 'http://localhost:8001/my_webapp/hello'
 
-  start_on_install false
-
   web_app 'my_webapp' do
     source 'http://tomcat.apache.org/tomcat-8.0-doc/appdev/sample/sample.war'
 
@@ -156,23 +154,31 @@ cerner_tomcat 'my_tomcat_2' do
   )
   create_user false
 
-  template 'conf/server.xml' do
-    source 'server.xml.erb'
-    variables(
-      'port' => {
-        'connector' => 8011,
-        'shutdown' => 8012,
-        'ajp' => 8013,
-      })
-  end
-
   health_check 'http://localhost:8011/my_webapp/hello' do
     args '-k'
   end
 
-  start_on_install false
-
   web_app 'my_webapp' do
     source 'http://tomcat.apache.org/tomcat-8.0-doc/appdev/sample/sample.war'
+  end
+end
+
+# we know this file landed if the service is able to succesfully start
+cerner_tomcat_template 'conf/server.xml' do
+  parent 'my_tomcat_2'
+  source 'server.xml.erb'
+  variables(
+    'port' => {
+      'connector' => 8011,
+      'shutdown' => 8012,
+      'ajp' => 8013,
+    })
+end
+
+cerner_tomcat_web_app 'my_webapp' do
+  parent 'my_tomcat_2'
+  source 'http://tomcat.apache.org/tomcat-8.0-doc/appdev/sample/sample.war'
+  cookbook_file 'my_file' do
+    source 'my_file'
   end
 end
