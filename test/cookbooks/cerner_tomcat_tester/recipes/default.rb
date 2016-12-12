@@ -153,6 +153,7 @@ cerner_tomcat 'my_tomcat_2' do
     'max_processes' => 4096
   )
   create_user false
+  service_manager :upstart
 
   health_check 'http://localhost:8011/my_webapp/hello' do
     args '-k'
