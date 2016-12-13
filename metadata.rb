@@ -17,6 +17,7 @@ depends 'ulimit', '~> 0.4'
 depends 'logrotate'
 depends 'poise', '~> 2.4'
 depends 'poise-archive', '~> 1.2'
+depends 'poise-service', '~> 1.4'
 depends 'compat_resource', '>= 12.16'
 
 version '3.0.0'

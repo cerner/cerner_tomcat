@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe CernerTomcat::Helpers::HealthCheckBlock do
+describe CernerTomcat::HealthCheckBlock do
   let(:health_check) do
-    CernerTomcat::Helpers::HealthCheckBlock.new('http://host.com')
+    CernerTomcat::HealthCheckBlock.new('http://host.com')
   end
 
   context 'evaluate block' do

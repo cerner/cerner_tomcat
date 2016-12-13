@@ -1,17 +1,20 @@
 #!/bin/bash
+<%- content = @new_resource.enclosing_provider.new_resource -%>
 <%# coding: UTF-8%>
 ### BEGIN INIT INFO
-<% @init_info.each do |k, v| -%>
+<% content.init_info.each do |k, v| -%>
 # <%= k %>: <%= v %>
 <% end -%>
+# Provides: <%= content.instance_name %>
+# Short-Description: <%= "#{content.instance_name} tomcat server" %>
 ### END INIT INFO
 
 # Set up the path to CATALINA_HOME (base of Tomcat)
-CATALINA_HOME=<%= ::File.join(@new_resource.base_dir, @new_resource.instance_name) %>
+CATALINA_HOME=<%= content.install_dir %>
 SLEEP_TIME=5
-TIMEOUT=<%= @new_resource.shutdown_timeout %>
-USER=<%= @new_resource.user %>
-NAME=<%= @new_resource.instance_name %>
+TIMEOUT=<%= content.shutdown_timeout %>
+USER=<%= content.user %>
+NAME=<%= content.instance_name %>
 START_CLASS="org.apache.catalina.startup.Bootstrap start"
 
 if [[ ! -f $CATALINA_HOME/bin/catalina.sh ]]; then
@@ -33,7 +36,7 @@ start() {
       exit 1
     fi
 
-    <% for hc in @new_resource.health_checks %>
+    <% for hc in content.health_checks %>
     echo "Waiting for application at <%= hc.uri.to_s %> to start"
     HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %> <%= hc.args %>)
     for BACKOFF in <%= hc.backoff.join(' ') %>
@@ -102,7 +105,7 @@ status() {
 health() {
     EXIT_CODE=0
     HC_CODE=0
-    <% for hc in @new_resource.health_checks %>
+    <% for hc in content.health_checks %>
     echo -n "Testing application at <%= hc.uri.to_s %> ..."
     HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %> <%= hc.args %>)
     if $(wasSuccessful $HC_CODE); then

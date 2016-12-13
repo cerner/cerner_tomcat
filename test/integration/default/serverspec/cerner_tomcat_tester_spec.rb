@@ -151,16 +151,17 @@ describe file('/etc/init.d/tomcat_my_tomcat') do
   it { should contain 'PID=`pgrep -u $USER -f "$CATALINA_HOME .*$START_CLASS"`' }
 end
 
-describe file('/etc/init.d/tomcat_my_tomcat_2') do
+describe file('/etc/init/my_tomcat_2.conf') do
   it { should be_file }
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
-  it { should contain '# Thing: Value' }
-  it { should contain '# Default-Start: 1 2 3 4 5' }
-  it { should contain '# Provides: my_tomcat_2' }
-  it { should contain '# Default-Stop: 0 1 2 6' }
-  it { should contain 'HC_CODE=$(healthCheck http://localhost:8011/my_webapp/hello GET 3 -k)' }
-  it { should contain 'PID=`pgrep -u $USER -f "$CATALINA_HOME .*$START_CLASS"`' }
+  it { should contain 'description "my_tomcat_2"' }
+  it { should contain 'start on runlevel [2345]' }
+  it { should contain 'stop on runlevel [!2345]' }
+  it { should contain 'respawn limit 10 5' }
+  it { should contain 'umask 022' }
+  it { should contain 'chdir /opt/my_dir/my_tomcat_2' }
+  it { should contain 'env CATALINA_HOME="/opt/my_dir/my_tomcat_2"' }
 end
 
 describe file('/opt/my_dir/my_tomcat/bin/setenv.sh') do

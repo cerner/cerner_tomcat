@@ -65,7 +65,7 @@ end
 
 A resource for installing and configuring tomcat.
 
-Actions: `:install`, `:uninstall`, `:stop`, `:restart` (default `:install`)
+Actions: `:enable`, `:disable`, `:start`, `:stop`, `:restart`, `:reload` (default `:enable`)
 
 Parameters:
  * `instance_name`: The name of the tomcat instance. (default = name of resource)
@@ -84,6 +84,7 @@ Parameters:
  * `limits`: A Hash or ruby block of limits applied to the owner user of the tomcat process (default=`{ 'open_files' => 32_768, 'max_processes' => 1024 }`)
  * `create_user`: A boolean that indicates if the service user should be created (default=`true`)
  * `sensitive`: A boolean used to ensure sensitive resource data is not logged by the chef-client. Remote_file, cookbook_file, and template sub-resources can be overriden (default=true)
+ * `service_manager`: The service management framework to use. Supported frameworks include `:sysvinit` and `:upstart`. If using `:upstart` then init_info, shutdown_timeout, and any provided health_checks will be ignored (default=`:sysvinit`)
 
 Example:
 ``` ruby
