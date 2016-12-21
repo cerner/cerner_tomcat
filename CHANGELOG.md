@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+[3.0.0 - 12-21-2016](https://github.com/cerner/cerner_tomcat/issues?milestone=6&state=closed)
+---------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-22](https://github.com/cerner/cerner_tomcat/issues/22) : Upgrade off init to upstart/systemd/etc
+  * [Bug] [Issue-21](https://github.com/cerner/cerner_tomcat/issues/21) : find_pid within init.d script can qualify different Tomcat installations 
+  * [Enhancement] [Issue-4](https://github.com/cerner/cerner_tomcat/issues/4) : Sub resources should provide all options (remote_file, cookbook_file, template)
+
 [2.3.0 - 10-26-2016](https://github.com/cerner/cerner_tomcat/issues?milestone=4&state=closed)
 ---------------------------------------------------------------------------------------------
 
