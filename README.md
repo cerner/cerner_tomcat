@@ -76,7 +76,8 @@ Parameters:
  * `log_rotate_options`: A hash or ruby block of options to configure log rotate. These will be merged with and override the defaults provided (view `libraries/cerner_tomcat.rb` for defaults)
  * `version`: The version of tomcat to install. This effectively builds the tomcat_url from a known URL (`repo1.maven.org`) with the given version (default=`8.0.21`)
  * `tomcat_url`: The URL to the tomcat binary used to install tomcat. This will override the url provided by `version`. NOTE: `version` needs to still be up to date in order to install tomcat properly
- * `shutdown_timeout`: The timeout used when trying to shutdown the tomcat service (default = `60`)
+ * `shutdown_timeout`: The timeout used when trying to shutdown the tomcat service (default = `60`). If the timeout is reached, diagnostics are captured about the instance
+ and the a force shutdown is applied.
  * `java_settings`: A Hash of java settings to be applied to the tomcat process (default = `{}`)
  * `env_vars`: A Hash of environment variables to be available when starting tomcat (default = `{}`)
  * `init_info`: A Hash or ruby block of options to configure the init script. These will be merged with and override the defaults provided (view `libraries/cerner_tomcat.rb` for defaults)

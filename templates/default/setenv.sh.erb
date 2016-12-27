@@ -8,3 +8,5 @@ export <%= k %>=<%= v %>
 # Java settings
 export CATALINA_OPTS="$CATALINA_OPTS <%= @java_settings.map{|k,v| k.to_s + v.to_s }.join(" ") %>"
 <% end -%>
+
+CATALINA_PID="$CATALINA_BASE/bin/catalina.pid"

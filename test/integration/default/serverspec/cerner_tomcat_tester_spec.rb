@@ -169,10 +169,16 @@ describe file('/opt/my_dir/my_tomcat/bin/setenv.sh') do
   it { should be_owned_by 'my_user' }
   it { should be_grouped_into 'my_group' }
   it { should contain 'export TEST_VAR=TEST_VALUE' }
+  it { should contain 'CATALINA_PID="$CATALINA_BASE/bin/catalina.pid"' }
 end
 
 describe file('/etc/security/limits.d/my_user_limits.conf') do
   it { should be_file }
   it { should contain 'my_user - nofile 65536' }
   it { should contain 'my_user - nproc 4096' }
+end
+
+describe command('service tomcat_my_tomcat diagnostic') do
+  its(:stdout) { should match /Capturing JVM metrics of my_tomcat \(\d+\)\:/ }
+  its(:exit_status) { should eq 0 }
 end
