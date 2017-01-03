@@ -175,6 +175,26 @@ cerner_tomcat "my_tomcat" do
 end
 ```
 
+### Troubleshooting
+
+The cookbook additionally configures a `diagnostic` command option as part of the `sysvinit` installation of the service. This command
+captures various metrics of the JVM and bundles it in a `tar.gz` within a temp directory for later evaluation. Diagnostics which are
+included in this bundle:
+
+* JVM performance counters: Series of stats on the JVM, which are a lot of simple facts of the run-time at a low cost of acquiring
+(filename: `<service_name>_perfcount.log`).
+* JVM thread dump: Helpful to identify non-daemon threads and JVM information about each thread with their native thread ID
+(filename: `<service_name>_thread_dump.log`).
+* Native thread logs: Helpful to correlate CPU utilization to native threads which are tied to in the JVM thread dump with the 
+native thread ID (nid). These are samplings from `top` which include native thread utilization (filename: `<service_name>_native_thread.log`).
+* JVM GC class histogram: Helpful if JVM seems hung, and identified GC threads are utilizing high CPU, to then evaluate the amount 
+of objects / types being created (filename: `<service_name>_gc_class_histogram.log`).
+
+If using the `sysvinit` installation of the service, and the Tomcat service does not shutdown in a timely manner (within the defined 
+timeout period), it will include a thread dump as part of the service stdout (ex. `catalina.out`), and may additionally invoke this
+diagnostic bundle to be created before forcing the service process to shutdown (through an OS signal). This can be helpful to further
+evaluate if a service is consistently requiring a forceful shutdown (web application may have a non-daemon thread not being shutdown).
+
 Contributing
 ------------
 
