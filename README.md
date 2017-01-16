@@ -76,7 +76,8 @@ Parameters:
  * `log_rotate_options`: A hash or ruby block of options to configure log rotate. These will be merged with and override the defaults provided (view `libraries/cerner_tomcat.rb` for defaults)
  * `version`: The version of tomcat to install. This effectively builds the tomcat_url from a known URL (`repo1.maven.org`) with the given version (default=`8.0.21`)
  * `tomcat_url`: The URL to the tomcat binary used to install tomcat. This will override the url provided by `version`. NOTE: `version` needs to still be up to date in order to install tomcat properly
- * `shutdown_timeout`: The timeout used when trying to shutdown the tomcat service (default = `60`)
+ * `shutdown_timeout`: The timeout used when trying to shutdown the tomcat service (default = `60`). If the timeout is reached, diagnostics are captured about the instance
+ and the a force shutdown is applied.
  * `java_settings`: A Hash of java settings to be applied to the tomcat process (default = `{}`)
  * `env_vars`: A Hash of environment variables to be available when starting tomcat (default = `{}`)
  * `init_info`: A Hash or ruby block of options to configure the init script. These will be merged with and override the defaults provided (view `libraries/cerner_tomcat.rb` for defaults)
@@ -173,6 +174,26 @@ cerner_tomcat "my_tomcat" do
   end
 end
 ```
+
+### Troubleshooting
+
+The cookbook additionally configures a `diagnostic` command option as part of the `sysvinit` installation of the service. This command
+captures various metrics of the JVM and bundles it in a `tar.gz` within a temp directory for later evaluation. Diagnostics which are
+included in this bundle:
+
+* JVM performance counters: Series of stats on the JVM, which are a lot of simple facts of the run-time at a low cost of acquiring
+(filename: `<service_name>_perfcount.log`).
+* JVM thread dump: Helpful to identify non-daemon threads and JVM information about each thread with their native thread ID
+(filename: `<service_name>_thread_dump.log`).
+* Native thread logs: Helpful to correlate CPU utilization to native threads which are tied to in the JVM thread dump with the 
+native thread ID (nid). These are samplings from `top` which include native thread utilization (filename: `<service_name>_native_thread.log`).
+* JVM GC class histogram: Helpful if JVM seems hung, and identified GC threads are utilizing high CPU, to then evaluate the amount 
+of objects / types being created (filename: `<service_name>_gc_class_histogram.log`).
+
+If using the `sysvinit` installation of the service, and the Tomcat service does not shutdown in a timely manner (within the defined 
+timeout period), it will include a thread dump as part of the service stdout (ex. `catalina.out`), and may additionally invoke this
+diagnostic bundle to be created before forcing the service process to shutdown (through an OS signal). This can be helpful to further
+evaluate if a service is consistently requiring a forceful shutdown (web application may have a non-daemon thread not being shutdown).
 
 Contributing
 ------------

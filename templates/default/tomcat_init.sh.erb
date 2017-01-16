@@ -64,33 +64,23 @@ start() {
 }
 
 stop() {
-  echo "Shutting down $NAME:"
+  SHUTDOWN_CMD="$CATALINA_HOME/bin/shutdown.sh"
 
+  # We are not supplying the "force" option initially, as we want to 
+  # capture thread dumps to catalina.out if the service is not responding
+  # on normal shutdown. Using this option, and defining CATALINA_PID,
+  # it will also attempt to send a SIGTERM OS signal to the process
+  # if the shutdown port is not responding.
+  su -l $USER -c "$SHUTDOWN_CMD $TIMEOUT"
+
+  # Failed to shutdown both through the shutdown port / SIGTERM. Will
+  # capture a diagnostic bundle, and then do a force (SIGKILL) shutdown.
   find_pid
-
-  CURRENT_WAIT=0
-
-  # Wait until tomcat has successfully stopped
-  while [[ $PID -gt 0 ]];
-  do
-    echo "Attempting to shutdown $NAME..."
-    su -l $USER -c $CATALINA_HOME/bin/shutdown.sh
-
-    if [[ $? -ne 0 ]]; then
-      echo "Error stopping $NAME"
-      exit 1
-    fi
-
-    sleep $SLEEP_TIME
-    CURRENT_WAIT=$(($CURRENT_WAIT+$SLEEP_TIME))
-    if [[ $CURRENT_WAIT -gt $TIMEOUT ]]; then
-      echo "Timed out waiting for $NAME to stop"
-      exit 1
-    fi
-
-    find_pid
-  done
-  echo "$NAME has stopped"
+  if [[ $PID -gt 0 ]]; then
+    echo "Capturing diagnostics and then forcing shutdown..."
+    diagnostic
+    su -l $USER -c "$SHUTDOWN_CMD 1 -force"
+  fi
 }
 
 status() {
@@ -116,6 +106,42 @@ health() {
     fi
     <% end %>
     exit $EXIT_CODE
+}
+
+diagnostic() { 
+    find_pid   
+    TMP_DIR=<%= Chef::Config[:file_cache_path] %>
+    PARENTDIR=`mktemp -d ${TMP_DIR}/${NAME}.XXXXXX`
+    DIR=$PARENTDIR/diag
+    mkdir $DIR
+    chown $USER $PARENTDIR $DIR
+    echo "Capturing JVM metrics of $NAME ($PID):"
+    
+    echo "Capturing native thread state..."
+    FILE="${DIR}/${NAME}_native_thread.log"
+    su $USER -c "top -b -n3 -H -p $PID > $FILE"
+    
+    echo "Capturing JVM performance metrics..."
+    FILE="${DIR}/${NAME}_perfcount.log"
+    su $USER -c "jcmd $PID PerfCounter.print > $FILE"
+    
+    echo "Capturing JVM thread dump..."
+    FILE="${DIR}/${NAME}_thread_dump.log"
+    su $USER -c "jcmd $PID Thread.print > $FILE"
+    
+    echo "Capturing JVM class histogram..."
+    FILE="${DIR}/${NAME}_gc_class_histogram.log"
+    su $USER -c "jcmd $PID GC.class_histogram > $FILE"
+        
+    # Create a tar.gz file with the diagnostic files
+    echo "Compressing contents..."
+    TIMESTAMP=`date +"%Y%m%d%H%M"`
+    HOST=`hostname`
+    TARFILE="${PARENTDIR}/${NAME}_${HOST}_${PID}_${TIMESTAMP}.tar.gz"
+    tar -czvf $TARFILE -C $DIR . > /dev/null 2>&1
+    # Remove the files which are now included in the archive
+    rm -rf $DIR
+    echo "Diagnostic information included in: $TARFILE"
 }
 
 # Runs an HTTP health check against the specified URI.
@@ -161,7 +187,10 @@ case "$1" in
   health)
     health
   ;;
+  diagnostic)
+    diagnostic
+  ;;
   *)
-    echo "Usage: tomcat_$NAME {start|stop|restart|status|health}"
+    echo "Usage: tomcat_$NAME {start|stop|restart|status|health|diagnostic}"
     exit 1
 esac
