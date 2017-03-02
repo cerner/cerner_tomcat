@@ -158,6 +158,8 @@ describe file('/etc/init/my_tomcat_2.conf') do
   it { should contain 'description "my_tomcat_2"' }
   it { should contain 'start on runlevel [2345]' }
   it { should contain 'stop on runlevel [!2345]' }
+  it { should contain 'limit nofile 65536 65536' }
+  it { should contain 'limit nproc 4096 4096' }
   it { should contain 'respawn limit 10 5' }
   it { should contain 'umask 022' }
   it { should contain 'chdir /opt/my_dir/my_tomcat_2' }

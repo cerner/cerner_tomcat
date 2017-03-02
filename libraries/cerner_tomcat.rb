@@ -269,8 +269,8 @@ module CernerTomcat
           end
         end
 
-	def service_options(service)
-	  service.command(new_resource.command)
+        def service_options(service)
+          service.command(new_resource.command)
           service.directory(new_resource.install_dir)
           service.user(new_resource.user)
           service.environment( { 'CATALINA_HOME' => new_resource.install_dir } )
@@ -281,10 +281,10 @@ module CernerTomcat
           )
           service.options(
             :cerner_tomcat_upstart,
-            template: 'poise-service:upstart.conf.erb'
+            template: 'cerner_tomcat:upstart.conf.erb'
           )
           service.provider("cerner_tomcat_#{new_resource.service_manager}".to_sym)
-	end
+        end
       end
     end
   end
