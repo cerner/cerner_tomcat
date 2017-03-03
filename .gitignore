@@ -19,3 +19,5 @@ vendor/
 
 .kitchen/
 .kitchen.local.yml
+
+.project
