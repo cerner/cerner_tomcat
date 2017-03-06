@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+[3.1.0 - 03-06-2017](https://github.com/cerner/cerner_tomcat/issues?milestone=7&state=closed)
+---------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-41](https://github.com/cerner/cerner_tomcat/issues/41) : Added support for setting the nofile ulimit in the upstart configurat…
+  * [Feature] [Issue-5](https://github.com/cerner/cerner_tomcat/issues/5) : Kill process when it doesn't stop cleanly and gather information
+
 [3.0.0 - 12-21-2016](https://github.com/cerner/cerner_tomcat/issues?milestone=6&state=closed)
 ---------------------------------------------------------------------------------------------
 
