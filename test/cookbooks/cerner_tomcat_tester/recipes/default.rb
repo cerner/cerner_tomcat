@@ -1,7 +1,23 @@
 
+# The kitchen tests are configuring the manage the user outside of cerner_tomcat.
+# As a result, we will manage it separately from the provider.
+tomcat_user = 'my_user'
+tomcat_group = 'my_group'
+
+# Setup user/group
+group tomcat_group do
+  action :create
+end
+
+user tomcat_user do
+  gid tomcat_group
+  home "/home/#{tomcat_user}"
+  manage_home true
+end
+
 cerner_tomcat 'my_tomcat' do
-  user 'my_user'
-  group 'my_group'
+  user tomcat_user
+  group tomcat_group
   base_dir '/opt/my_dir'
   log_dir '/opt/my_logs'
   log_rotate_options('rotate' => 1)
@@ -123,8 +139,8 @@ end
 # Including a secondary instance to test delay service starting
 # between installations
 cerner_tomcat 'my_tomcat_2' do
-  user 'my_user'
-  group 'my_group'
+  user tomcat_user
+  group tomcat_group
   base_dir '/opt/my_dir'
   log_dir '/opt/my_logs'
   log_rotate_options('rotate' => 1)
