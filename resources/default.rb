@@ -2,9 +2,6 @@
 def initialize(*args)
   super
 
-  # Default action
-  @action = :install
-
   @cookbook_files = []
   @remote_files = []
   @templates = []
@@ -13,6 +10,7 @@ def initialize(*args)
 end
 
 actions(:install, :uninstall)
+default_action :install
 
 attribute :instance_name,      kind_of: String,  name_attribute: true
 attribute :user,               kind_of: String,  default: 'tomcat'
