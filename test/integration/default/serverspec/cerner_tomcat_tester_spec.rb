@@ -5,6 +5,7 @@ require 'spec_helper'
 describe user('my_user') do
   it { should exist }
   it { should belong_to_group 'my_group' }
+  it { should have_home_directory '/home/my_user' }
 end
 
 describe service('my_tomcat') do
@@ -135,6 +136,7 @@ describe file('/etc/init.d/tomcat_my_tomcat') do
   it { should contain '# Provides: my_tomcat' }
   it { should contain '# Default-Stop: 0 1 2 6' }
   it { should contain 'HC_CODE=$(healthCheck http://localhost:8001/my_webapp/hello GET 3 )' }
+  it { should contain 'PID=`pgrep -u $USER -f "$CATALINA_HOME .*$START_CLASS"`' }
 end
 
 describe file('/etc/init.d/tomcat_my_tomcat_2') do
@@ -153,10 +155,16 @@ describe file('/opt/my_dir/my_tomcat/bin/setenv.sh') do
   it { should be_owned_by 'my_user' }
   it { should be_grouped_into 'my_group' }
   it { should contain 'export TEST_VAR=TEST_VALUE' }
+  it { should contain 'CATALINA_PID="$CATALINA_BASE/bin/catalina.pid"' }
 end
 
 describe file('/etc/security/limits.d/my_user_limits.conf') do
   it { should be_file }
   it { should contain 'my_user - nofile 65536' }
   it { should contain 'my_user - nproc 4096' }
+end
+
+describe command('service tomcat_my_tomcat diagnostic') do
+  its(:stdout) { should match /Capturing JVM metrics of my_tomcat \(\d+\)\:/ }
+  its(:exit_status) { should eq 0 }
 end
