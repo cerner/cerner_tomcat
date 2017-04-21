@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+[2.4.0 - 04-19-2017](https://github.com/cerner/cerner_tomcat/issues?milestone=8&state=closed)
+---------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-47](https://github.com/cerner/cerner_tomcat/issues/47) : Fix foodcritic 2x
+  * [Enhancement] [Issue-45](https://github.com/cerner/cerner_tomcat/issues/45) : Kill process when it doesn't stop cleanly and gather information (2.x)
+
 [2.3.0 - 10-26-2016](https://github.com/cerner/cerner_tomcat/issues?milestone=4&state=closed)
 ---------------------------------------------------------------------------------------------
 
