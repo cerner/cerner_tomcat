@@ -15,6 +15,11 @@ module CernerTomcat
       @source
     end
 
+    def checksum(checksum = nil)
+      @checksum = checksum unless checksum.nil?
+      @checksum
+    end
+
     def cookbook_file(file_path, &block)
       cookbook_file_block = CookbookFileBlock.new(file_path)
       cookbook_file_block.evaluate(&block)
