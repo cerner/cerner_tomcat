@@ -153,12 +153,14 @@ be the context root to be used for the application. This sub-resource also accep
 
 Parameters:
  * `source`: The URL to the war file of the application (required)
+ * `checksum`: The SHA256 checksum of the war file of the application (optional)
 
 Example:
 ``` ruby
 cerner_tomcat "my_tomcat" do
   web_app "myApp" do
     source "http://myRepo.com/myApp-1.0.war"
+    checksum "feccf30cad8aa5aea7a4e661ca9c32bab44d3df8ef5d97bd9c7eacf5c841bb17"
 
     cookbook_file "WEB-INF/classes/app.properties" do
       source "app.properties"

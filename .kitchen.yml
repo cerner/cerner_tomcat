@@ -4,6 +4,7 @@ driver:
 
 provisioner:
   name: chef_solo
+  log_level: info
 
 platforms:
   - name: ubuntu-14.04

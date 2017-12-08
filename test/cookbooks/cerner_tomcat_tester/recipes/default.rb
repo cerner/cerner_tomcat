@@ -118,6 +118,7 @@ cerner_tomcat 'my_tomcat' do
 
   web_app 'my_webapp' do
     source 'http://tomcat.apache.org/tomcat-8.0-doc/appdev/sample/sample.war'
+    checksum '89b33caa5bf4cfd235f060c396cb1a5acb2734a1366db325676f48c5f5ed92e5'
 
     cookbook_file 'my_file' do
       source 'my_file'
@@ -161,6 +162,7 @@ cerner_tomcat 'my_tomcat_2' do
 
   web_app 'my_webapp' do
     source 'http://tomcat.apache.org/tomcat-8.0-doc/appdev/sample/sample.war'
+    checksum '89b33caa5bf4cfd235f060c396cb1a5acb2734a1366db325676f48c5f5ed92e5'
   end
 end
 
@@ -179,6 +181,7 @@ end
 cerner_tomcat_web_app 'my_webapp' do
   parent 'my_tomcat_2'
   source 'http://tomcat.apache.org/tomcat-8.0-doc/appdev/sample/sample.war'
+  checksum '89b33caa5bf4cfd235f060c396cb1a5acb2734a1366db325676f48c5f5ed92e5'
   cookbook_file 'my_file' do
     source 'my_file'
   end
