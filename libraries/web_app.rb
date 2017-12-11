@@ -30,6 +30,7 @@ module CernerTomcat
         actions(:create)
 
         attribute :source, kind_of: String, required: true
+        attribute :checksum, kind_of: String
 
         def initialize(*args)
           super
@@ -66,6 +67,7 @@ module CernerTomcat
 	      source new_resource.source
 	      owner parent.user
 	      group parent.group
+	      checksum new_resource.checksum if new_resource.checksum
 	      mode '0755'
 	      backup false
               notifies :stop, new_resource.parent, :before
