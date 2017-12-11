@@ -173,6 +173,7 @@ action :install do
       source web_app.source
       owner new_resource.user
       group new_resource.group
+      checksum web_app.checksum if web_app.checksum
       mode '0755'
       backup false
 
