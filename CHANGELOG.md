@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-[3.2.0 - 12-11-2017](https://github.com/cerner/cerner_tomcat/issues?milestone=9&state=closed)
+[3.2.0 - 01-02-2018](https://github.com/cerner/cerner_tomcat/issues?milestone=9&state=closed)
 ---------------------------------------------------------------------------------------------
 
   * [Feature] [Issue-52](https://github.com/cerner/cerner_tomcat/issues/52) : Accept checksum for web_app source
@@ -13,12 +13,23 @@ Change Log
   * [Enhancement] [Issue-41](https://github.com/cerner/cerner_tomcat/issues/41) : Added support for setting the nofile ulimit in the upstart configurat…
   * [Feature] [Issue-5](https://github.com/cerner/cerner_tomcat/issues/5) : Kill process when it doesn't stop cleanly and gather information
 
-[3.0.0 - 12-21-2016](https://github.com/cerner/cerner_tomcat/issues?milestone=6&state=closed)
+[3.0.0 - 01-16-2017](https://github.com/cerner/cerner_tomcat/issues?milestone=6&state=closed)
 ---------------------------------------------------------------------------------------------
 
   * [Enhancement] [Issue-22](https://github.com/cerner/cerner_tomcat/issues/22) : Upgrade off init to upstart/systemd/etc
   * [Bug] [Issue-21](https://github.com/cerner/cerner_tomcat/issues/21) : find_pid within init.d script can qualify different Tomcat installations 
   * [Enhancement] [Issue-4](https://github.com/cerner/cerner_tomcat/issues/4) : Sub resources should provide all options (remote_file, cookbook_file, template)
+
+[2.5.0 - 01-02-2018](https://github.com/cerner/cerner_tomcat/issues?milestone=10&state=closed)
+----------------------------------------------------------------------------------------------
+
+  * [Feature] [Issue-53](https://github.com/cerner/cerner_tomcat/issues/53) : Accept checksum for web_app source (2.x patchback)
+
+[2.4.0 - 12-11-2017](https://github.com/cerner/cerner_tomcat/issues?milestone=8&state=closed)
+---------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-47](https://github.com/cerner/cerner_tomcat/issues/47) : Fix foodcritic 2x
+  * [Enhancement] [Issue-45](https://github.com/cerner/cerner_tomcat/issues/45) : Kill process when it doesn't stop cleanly and gather information (2.x)
 
 [2.3.0 - 10-26-2016](https://github.com/cerner/cerner_tomcat/issues?milestone=4&state=closed)
 ---------------------------------------------------------------------------------------------
@@ -39,3 +50,9 @@ Change Log
 
   * [Bug] [Issue-9](https://github.com/cerner/cerner_tomcat/issues/9) : Restart service on java setting changes
   * [Bug] [Issue-8](https://github.com/cerner/cerner_tomcat/issues/8) : Uninstall action needs recursive property to delete tomcat instance
+
+[2.1.0 - 12-10-2015](https://github.com/cerner/cerner_tomcat/issues?milestone=1&state=closed)
+---------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-1](https://github.com/cerner/cerner_tomcat/issues/1) : Move to open source
+
