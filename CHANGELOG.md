@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+[2.5.0 - 12-11-2017](https://github.com/cerner/cerner_tomcat/issues?milestone=10&state=closed)
+----------------------------------------------------------------------------------------------
+
+  * [Feature] [Issue-53](https://github.com/cerner/cerner_tomcat/issues/53) : Accept checksum for web_app source (2.x patchback)
+
 [2.4.0 - 04-19-2017](https://github.com/cerner/cerner_tomcat/issues?milestone=8&state=closed)
 ---------------------------------------------------------------------------------------------
 
