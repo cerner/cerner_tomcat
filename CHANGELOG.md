@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+[3.2.0 - 12-11-2017](https://github.com/cerner/cerner_tomcat/issues?milestone=9&state=closed)
+---------------------------------------------------------------------------------------------
+
+  * [Feature] [Issue-52](https://github.com/cerner/cerner_tomcat/issues/52) : Accept checksum for web_app source
+  * [Enhancement] [Issue-46](https://github.com/cerner/cerner_tomcat/issues/46) : Fixed foodcritic issues after Chef 13 release
+
 [3.1.0 - 03-06-2017](https://github.com/cerner/cerner_tomcat/issues?milestone=7&state=closed)
 ---------------------------------------------------------------------------------------------
 
