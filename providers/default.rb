@@ -52,6 +52,14 @@ action :install do
     recursive true
   end
 
+  # Create install directory
+  directory new_resource.install_dir do
+    action :create
+    owner new_resource.user
+    group new_resource.group
+    mode '0755'
+  end
+
   # Download tomcat
   remote_file "#{Chef::Config[:file_cache_path]}/#{tomcat_file}" do
     source tomcat_url
@@ -82,7 +90,6 @@ action :install do
     owner new_resource.user
     group new_resource.group
     mode '0755'
-    recursive true
   end
 
   # Link tomcat log files into /var/log/tomcat/[instanceName]
