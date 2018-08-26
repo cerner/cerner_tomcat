@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+[4.0.0 - MM-DD-YY](https://github.com/cerner/cerner_tomcat/issues?milestone=TBD&state=closed)
+---------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-55](https://github.com/cerner/cerner_tomcat/issues/55) : Compatibility with all versions of the `java` cookbook
+
 [3.2.0 - 01-02-2018](https://github.com/cerner/cerner_tomcat/issues?milestone=9&state=closed)
 ---------------------------------------------------------------------------------------------
 

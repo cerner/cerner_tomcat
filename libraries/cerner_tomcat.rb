@@ -56,7 +56,6 @@ module CernerTomcat
         attribute :java_settings, kind_of: Hash, default: {}
         attribute :env_vars, kind_of: Hash, default: {}
         attribute :init_info, option_collector: true, default: lazy { default_init_info }
-        attribute :install_java, equal_to: [true, false], default: true
         attribute :limits, option_collector: true, default: { 'open_files' => 32_768, 'max_processes' => 1024 }
         attribute :create_user, equal_to: [true, false], default: false
         attribute :sensitive, equal_to: [true, false], default: true
@@ -137,9 +136,6 @@ module CernerTomcat
             log_dir = ::File.join(new_resource.log_dir, new_resource.instance_name)
             tomcat_url = new_resource.tomcat_url
             tomcat_file = "cerner_tomcat_#{new_resource.instance_name}-apache-tomcat.tar.gz"
-
-            # Install java
-            run_context.include_recipe 'java' if new_resource.install_java
 
             # Ensure curl is installed if we have any health checks
             package "curl_#{new_resource.instance_name}" do

@@ -22,7 +22,6 @@ Requirements
 
 ### Cookbooks
 
- * java
  * ulimit
  * logrotate
  * poise
@@ -31,7 +30,7 @@ Requirements
 Usage
 -----
 
-The cookbook provides a resource for you to use to install and configure tomcat.
+The cookbook provides a resource for you to use to install and configure Tomcat. If you also wish to install Java, that must be done separately, typicaly by including the [`java`](https://github.com/sous-chefs/java) cookbook in your run list before `cerner_tomcat`. Or, if you want to use a Java installation other than the system-wide default, you can configure `JAVA_HOME` in the `env_vars` parameter.
 
 The `cerner_tomcat` resource has support for `remote_file`, `cookbook_file`, and `template` as sub-resources of the cerner_tomcat resource. When using these sub-resources, the parent `cerner_tomcat` resource's path, user, group and sensitive properties are provided for free. These sub-resources can also be called from outside the `cerner_tomcat` block, if desired, by prepending `cerner_tomcat_` to the resource call and provided a `parent` property.
 
@@ -63,26 +62,25 @@ end
 
 ### cerner_tomcat
 
-A resource for installing and configuring tomcat.
+A resource for installing and configuring Tomcat.
 
 Actions: `:enable`, `:disable`, `:start`, `:stop`, `:restart`, `:reload` (default `:enable`)
 
 Parameters:
- * `instance_name`: The name of the tomcat instance. (default = name of resource)
- * `user`: The user that will own and run the tomcat process (default = `tomcat`)
- * `group`: The group the tomcat user will be part of (default = `tomcat`)
- * `base_dir`: The path to the directory where the tomcat instance will be contained (default = `/opt/tomcat`)
- * `log_dir`: The path to the directory where the tomcat logs will be (default = `/var/log/tomcat`)
+ * `instance_name`: The name of the Tomcat instance. (default = name of resource)
+ * `user`: The user that will own and run the Tomcat process (default = `tomcat`)
+ * `group`: The group the Tomcat user will be part of (default = `tomcat`)
+ * `base_dir`: The path to the directory where the Tomcat instance will be contained (default = `/opt/tomcat`)
+ * `log_dir`: The path to the directory where the Tomcat logs will be (default = `/var/log/tomcat`)
  * `log_rotate_options`: A hash or ruby block of options to configure log rotate. These will be merged with and override the defaults provided (view `libraries/cerner_tomcat.rb` for defaults)
- * `version`: The version of tomcat to install. This effectively builds the tomcat_url from a known URL (`repo1.maven.org`) with the given version (default=`8.0.21`)
- * `tomcat_url`: The URL to the tomcat binary used to install tomcat. This will override the url provided by `version`. NOTE: `version` needs to still be up to date in order to install tomcat properly
- * `shutdown_timeout`: The timeout used when trying to shutdown the tomcat service (default = `60`). If the timeout is reached, diagnostics are captured about the instance
+ * `version`: The version of Tomcat to install. This effectively builds the `tomcat_url` from a known URL (`repo1.maven.org`) with the given version (default=`8.0.21`)
+ * `tomcat_url`: The URL to the Tomcat binary used to install Tomcat. This will override the url provided by `version`. NOTE: `version` must still be configured in order to install Tomcat properly.
+ * `shutdown_timeout`: The timeout used when trying to shutdown the Tomcat service (default = `60`). If the timeout is reached, diagnostics are captured about the instance
  and the a force shutdown is applied.
- * `java_settings`: A Hash of java settings to be applied to the tomcat process (default = `{}`)
- * `env_vars`: A Hash of environment variables to be available when starting tomcat (default = `{}`)
+ * `java_settings`: A Hash of Java settings to be applied to the Tomcat process (default = `{}`)
+ * `env_vars`: A Hash of environment variables to be available when starting Tomcat (default = `{}`)
  * `init_info`: A Hash or ruby block of options to configure the init script. These will be merged with and override the defaults provided (view `libraries/cerner_tomcat.rb` for defaults)
- * `install_java`: A boolean that indicates if we should try to install java (default=`true`)
- * `limits`: A Hash or ruby block of limits applied to the owner user of the tomcat process (default=`{ 'open_files' => 32_768, 'max_processes' => 1024 }`)
+ * `limits`: A Hash or ruby block of limits applied to the owner user of the Tomcat process (default=`{ 'open_files' => 32_768, 'max_processes' => 1024 }`)
  * `create_user`: A boolean that indicates if the service user should be created (default=`true`)
  * `sensitive`: A boolean used to ensure sensitive resource data is not logged by the chef-client. Remote_file, cookbook_file, and template sub-resources can be overriden (default=true)
  * `service_manager`: The service management framework to use. Supported frameworks include `:sysvinit` and `:upstart`. If using `:upstart` then init_info, shutdown_timeout, and any provided health_checks will be ignored (default=`:sysvinit`)
@@ -108,7 +106,6 @@ cerner_tomcat "my_tomcat" do
                  "-XX:+UseParNewGC" => "")
   env_vars("MY_VAR" => "MY_VALUE")
   init_info('Default-Start' => '1 2 3 4 5')
-  install_java false
   limits(
     'open_files' => 32_768,
     'max_processes' => 1024
@@ -120,7 +117,7 @@ Sub-Resource Parameters:
 
 #### health_check
 
-A health check to be run when starting the tomcat service which uses HTTP to hit a web app's
+A health check to be run when starting the Tomcat service which uses HTTP to hit a web app's
 health resource to verify it started correctly and is working. The name of the resource
 should be the URL to your web app's health resource.
 
@@ -147,7 +144,7 @@ end
 
 #### web_app
 
-A web application to be included in the tomcat installation. The name of the sub-resource should
+A web application to be included in the Tomcat installation. The name of the sub-resource should
 be the context root to be used for the application. This sub-resource also accepts `cookbook_file`,
 `remote_file`, and `template` sub-resources just like those listed above.
 
