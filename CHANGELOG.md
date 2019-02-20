@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+[3.3.0 - 02-20-2019](https://github.com/cerner/cerner_tomcat/issues?milestone=11&state=closed)
+----------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-57](https://github.com/cerner/cerner_tomcat/issues/57) : update to support java 2.x
+
 [3.2.0 - 01-02-2018](https://github.com/cerner/cerner_tomcat/issues?milestone=9&state=closed)
 ---------------------------------------------------------------------------------------------
 
@@ -55,4 +60,3 @@ Change Log
 ---------------------------------------------------------------------------------------------
 
   * [Enhancement] [Issue-1](https://github.com/cerner/cerner_tomcat/issues/1) : Move to open source
-
