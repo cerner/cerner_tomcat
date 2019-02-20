@@ -12,7 +12,7 @@ chef_version '>= 12.0' if respond_to?(:chef_version)
 supports 'centos'
 supports 'ubuntu'
 
-depends 'java', '~> 1.42'
+depends 'java', '>= 1.42'
 depends 'ulimit', '~> 0.3'
 depends 'logrotate'
 depends 'poise', '~> 2.4'
