@@ -175,20 +175,26 @@ module CernerTomcat
               recursive true
             end
 
-            remote_file "#{Chef::Config[:file_cache_path]}/#{tomcat_file}" do
+            directory '/var/cerner_tomcat' do
+              owner new_resource.user
+              group new_resource.group
+              mode '0755'
+            end
+
+            remote_file "/var/cerner_tomcat/#{tomcat_file}" do
               source tomcat_url
               owner new_resource.user
               group new_resource.group
               mode '0755'
               backup false
               notifies :stop, new_resource, :immediately
-              notifies :unpack, "poise_archive[#{tomcat_file}]", :immediately
+              notifies :unpack, "poise_archive[/var/cerner_tomcat/#{tomcat_file}]", :immediately
             end
 
             web_app_dir = ::File.join(new_resource.install_dir, 'webapps')
 
             # Install tomcat
-            poise_archive tomcat_file do
+            poise_archive "/var/cerner_tomcat/#{tomcat_file}" do
               action :nothing
               destination new_resource.install_dir
               user new_resource.user
