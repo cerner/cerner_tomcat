@@ -86,6 +86,7 @@ Parameters:
  * `create_user`: A boolean that indicates if the service user should be created (default=`true`)
  * `sensitive`: A boolean used to ensure sensitive resource data is not logged by the chef-client. Remote_file, cookbook_file, and template sub-resources can be overriden (default=true)
  * `service_manager`: The service management framework to use. Supported frameworks include `:sysvinit` and `:upstart`. If using `:upstart` then init_info, shutdown_timeout, and any provided health_checks will be ignored (default=`:sysvinit`)
+ * `download_dir`: The path to the directory where the tomcat package will be download. user/group should have permission to read (default = `/var/cerner_tomcat`)
 
 Example:
 ``` ruby
