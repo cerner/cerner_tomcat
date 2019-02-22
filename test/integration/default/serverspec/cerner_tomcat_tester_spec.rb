@@ -184,3 +184,9 @@ describe command('service tomcat_my_tomcat diagnostic') do
   its(:stdout) { should match /Capturing JVM metrics of my_tomcat \(\d+\)\:/ }
   its(:exit_status) { should eq 0 }
 end
+
+describe file('/var/cerner_tomcat') do
+  it { should be_owned_by 'my_user' }
+  it { should be_grouped_into 'my_group' }
+  it { should be_directory }
+end

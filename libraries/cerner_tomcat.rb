@@ -61,6 +61,7 @@ module CernerTomcat
         attribute :create_user, equal_to: [true, false], default: false
         attribute :sensitive, equal_to: [true, false], default: true
         attribute :service_manager, equal_to: [:sysvinit, :upstart], default: :sysvinit
+        attribute :download_dir, kind_of: String, default: '/var/cerner_tomcat'
 
         def install_dir
           ::File.join(base_dir, instance_name)
@@ -175,26 +176,26 @@ module CernerTomcat
               recursive true
             end
 
-            directory '/var/cerner_tomcat' do
+            directory new_resource.download_dir do
               owner new_resource.user
               group new_resource.group
               mode '0755'
             end
 
-            remote_file "/var/cerner_tomcat/#{tomcat_file}" do
+            remote_file "#{new_resource.download_dir}/#{tomcat_file}" do
               source tomcat_url
               owner new_resource.user
               group new_resource.group
               mode '0755'
               backup false
               notifies :stop, new_resource, :immediately
-              notifies :unpack, "poise_archive[/var/cerner_tomcat/#{tomcat_file}]", :immediately
+              notifies :unpack, "poise_archive[#{new_resource.download_dir}/#{tomcat_file}]", :immediately
             end
 
             web_app_dir = ::File.join(new_resource.install_dir, 'webapps')
 
             # Install tomcat
-            poise_archive "/var/cerner_tomcat/#{tomcat_file}" do
+            poise_archive "#{new_resource.download_dir}/#{tomcat_file}" do
               action :nothing
               destination new_resource.install_dir
               user new_resource.user
