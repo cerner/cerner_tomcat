@@ -112,7 +112,7 @@ health() {
 
 diagnostic() {
     find_pid
-    TMP_DIR=<%= Chef::Config[:file_cache_path] %>
+    TMP_DIR=<%= content.download_dir %>
     PARENTDIR=`mktemp -d ${TMP_DIR}/${NAME}.XXXXXX`
     DIR=$PARENTDIR/diag
     mkdir $DIR
