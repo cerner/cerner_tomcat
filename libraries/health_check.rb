@@ -16,13 +16,14 @@
 
 module CernerTomcat
   class HealthCheckBlock
-    attr_reader :uri, :http_method, :backoff, :time_bound, :args
+    attr_reader :uri, :http_method, :backoff, :time_bound, :args, :redirects_healthy
 
     def initialize(uri)
       @uri = uri
       @http_method = 'GET'
       @backoff = [0, 5, 10, 30, 30, 60] # In seconds
       @time_bound = 3 # In seconds
+      @redirects_healthy = false # passive default
     end
 
     def uri(uri = nil)
@@ -43,6 +44,10 @@ module CernerTomcat
     def time_bound(time_bound = nil)
       @time_bound = time_bound if time_bound
       @time_bound
+    end
+
+    def redirects_healthy(redirects_healthy = nil)
+      @redirects_healthy = redirects_healthy if redirects_healthy
     end
 
     def args(args = nil)
