@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+[3.4.0 - 03-01-2019](https://github.com/cerner/cerner_tomcat/issues?milestone=12&state=closed)
+----------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-61](https://github.com/cerner/cerner_tomcat/issues/61) : Add option to count redirects as healthy
+  * [Enhancement] [Issue-60](https://github.com/cerner/cerner_tomcat/issues/60) : Use download_dir for diagnostics
+  * [Enhancement] [Issue-58](https://github.com/cerner/cerner_tomcat/issues/58) : Install requires opening permissions on /var/chef/cache
+
 [3.3.0 - 02-20-2019](https://github.com/cerner/cerner_tomcat/issues?milestone=11&state=closed)
 ----------------------------------------------------------------------------------------------
 
