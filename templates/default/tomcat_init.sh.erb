@@ -41,6 +41,7 @@ start() {
     <% for hc in content.health_checks %>
     echo "Waiting for application at <%= hc.uri.to_s %> to start"
     HC_CODE=$(healthCheck <%= hc.uri.to_s %> <%= hc.http_method %> <%= hc.time_bound %> <%= hc.args %>)
+    echo "redirects_healthy set to <%= hc.redirects_healthy %> !!!"
     INCLUDE_REDIRECT=<%= hc.redirects_healthy ? 'true' : 'false' %>
     for BACKOFF in <%= hc.backoff.join(' ') %>
     do
