@@ -48,6 +48,7 @@ module CernerTomcat
 
     def redirects_healthy(redirects_healthy = nil)
       @redirects_healthy = redirects_healthy if redirects_healthy
+      @redirects_healthy
     end
 
     def args(args = nil)
