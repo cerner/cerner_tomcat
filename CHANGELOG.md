@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+[3.4.1 - 03-11-2019](https://github.com/cerner/cerner_tomcat/issues?milestone=13&state=closed)
+----------------------------------------------------------------------------------------------
+
+  * [Bug] [Issue-63](https://github.com/cerner/cerner_tomcat/issues/63) : Adding redirects_healthy return value
+
 [3.4.0 - 03-01-2019](https://github.com/cerner/cerner_tomcat/issues?milestone=12&state=closed)
 ----------------------------------------------------------------------------------------------
 
