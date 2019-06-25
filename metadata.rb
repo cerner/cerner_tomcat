@@ -13,7 +13,7 @@ supports 'centos'
 supports 'ubuntu'
 
 depends 'java', '>= 1.42'
-depends 'ulimit', '~> 0.3'
+depends 'ulimit', '>= 0.3'
 depends 'logrotate'
 depends 'poise', '~> 2.4'
 depends 'poise-archive', '~> 1.2'
