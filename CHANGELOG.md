@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+[3.5.0 - 06-25-2019](https://github.com/cerner/cerner_tomcat/issues?milestone=14&state=closed)
+----------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-64](https://github.com/cerner/cerner_tomcat/issues/64) : updating limit version information
+
 [3.4.1 - 03-11-2019](https://github.com/cerner/cerner_tomcat/issues?milestone=13&state=closed)
 ----------------------------------------------------------------------------------------------
 
