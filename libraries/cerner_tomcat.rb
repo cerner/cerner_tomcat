@@ -94,7 +94,7 @@ module CernerTomcat
         end
 
         def default_tomcat_url
-          "http://repo1.maven.org/maven2/org/apache/tomcat/tomcat/#{version}/tomcat-#{version}.tar.gz"
+          "https://repo1.maven.org/maven2/org/apache/tomcat/tomcat/#{version}/tomcat-#{version}.tar.gz"
         end
 
         private
