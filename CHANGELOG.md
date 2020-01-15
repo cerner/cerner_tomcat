@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+[3.6.0 - 01-15-2020](https://github.com/cerner/cerner_tomcat/issues?milestone=15&state=closed)
+----------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-66](https://github.com/cerner/cerner_tomcat/issues/66) : Changed default tomcat URL to https
+
 [3.5.0 - 06-25-2019](https://github.com/cerner/cerner_tomcat/issues?milestone=14&state=closed)
 ----------------------------------------------------------------------------------------------
 
