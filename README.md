@@ -87,6 +87,7 @@ Parameters:
  * `sensitive`: A boolean used to ensure sensitive resource data is not logged by the chef-client. Remote_file, cookbook_file, and template sub-resources can be overriden (default=true)
  * `service_manager`: The service management framework to use. Supported frameworks include `:sysvinit` and `:upstart`. If using `:upstart` then init_info, shutdown_timeout, and any provided health_checks will be ignored (default=`:sysvinit`)
  * `download_dir`: The path to the directory where the tomcat package will be download. user/group should have permission to read (default = `/var/cerner_tomcat`)
+ * `user_shell`: The shell used by the service user for tomcat. If not supplied will fall back to poise_service_user defaults `[/bin/nologin, /usr/bin/nologin, /bin/false]`
 
 Example:
 ``` ruby
@@ -189,12 +190,12 @@ included in this bundle:
 (filename: `<service_name>_perfcount.log`).
 * JVM thread dump: Helpful to identify non-daemon threads and JVM information about each thread with their native thread ID
 (filename: `<service_name>_thread_dump.log`).
-* Native thread logs: Helpful to correlate CPU utilization to native threads which are tied to in the JVM thread dump with the 
+* Native thread logs: Helpful to correlate CPU utilization to native threads which are tied to in the JVM thread dump with the
 native thread ID (nid). These are samplings from `top` which include native thread utilization (filename: `<service_name>_native_thread.log`).
-* JVM GC class histogram: Helpful if JVM seems hung, and identified GC threads are utilizing high CPU, to then evaluate the amount 
+* JVM GC class histogram: Helpful if JVM seems hung, and identified GC threads are utilizing high CPU, to then evaluate the amount
 of objects / types being created (filename: `<service_name>_gc_class_histogram.log`).
 
-If using the `sysvinit` installation of the service, and the Tomcat service does not shutdown in a timely manner (within the defined 
+If using the `sysvinit` installation of the service, and the Tomcat service does not shutdown in a timely manner (within the defined
 timeout period), it will include a thread dump as part of the service stdout (ex. `catalina.out`), and may additionally invoke this
 diagnostic bundle to be created before forcing the service process to shutdown (through an OS signal). This can be helpful to further
 evaluate if a service is consistently requiring a forceful shutdown (web application may have a non-daemon thread not being shutdown).

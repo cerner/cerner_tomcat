@@ -62,6 +62,7 @@ module CernerTomcat
         attribute :sensitive, equal_to: [true, false], default: true
         attribute :service_manager, equal_to: [:sysvinit, :upstart], default: :sysvinit
         attribute :download_dir, kind_of: String, default: '/var/cerner_tomcat'
+        attribute :user_shell, kind_of: String, default: nil
 
         def install_dir
           ::File.join(base_dir, instance_name)
@@ -154,6 +155,7 @@ module CernerTomcat
               user new_resource.user
               group new_resource.group
               only_if { new_resource.create_user }
+              shell new_resource.user_shell unless new_resource.user_shell.nil?
             end
 
             ulimits = new_resource.limits
