@@ -20,4 +20,4 @@ depends 'poise-archive', '~> 1.2'
 depends 'poise-service', '~> 1.4'
 depends 'compat_resource', '>= 12.16'
 
-version '3.7.0'
+version '3.8.0'
