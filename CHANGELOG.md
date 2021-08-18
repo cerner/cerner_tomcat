@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+[3.7.0 - 08-18-2021](https://github.com/cerner/cerner_tomcat/issues?milestone=16&state=closed)
+----------------------------------------------------------------------------------------------
+
+  * [Enhancement] [Issue-67](https://github.com/cerner/cerner_tomcat/issues/67) : Add support for providing a user shell to tomcat's service user
+
 [3.6.0 - 01-15-2020](https://github.com/cerner/cerner_tomcat/issues?milestone=15&state=closed)
 ----------------------------------------------------------------------------------------------
 
